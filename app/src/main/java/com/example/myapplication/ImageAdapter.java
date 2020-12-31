@@ -50,7 +50,7 @@ public class ImageAdapter extends BaseAdapter {
             // 크기를 줄이는 이유는 메모리 부족 문제를 막을 수 있기 때문입니다.
             Bitmap bmp
                     = BitmapFactory.decodeResource(context.getResources(), imageArray[position]);
-            bmp = Bitmap.createScaledBitmap(bmp, 320, 240, false);
+            bmp = Bitmap.createScaledBitmap(bmp, 80, 80, false);
 
             //---------------------------------------------------------------
             // GridView 뷰를 구성할 ImageView 뷰들을 정의합니다.
