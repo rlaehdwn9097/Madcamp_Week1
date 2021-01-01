@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +15,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class Fragment1 extends Fragment {
+public class Fragment1 extends Fragment implements View.OnClickListener {
 
     public ContactsAdapter adapter;
     public ListView list;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private ArrayList<Contact> arrayList;
+    private FloatingActionButton fab;
+
 
     public Fragment1() {
         // Required empty public constructor
@@ -47,6 +51,11 @@ public class Fragment1 extends Fragment {
         AddItemFromFireBase();
         adapter.notifyDataSetChanged();
 
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+
+        fab.attachToListView(list);
+        fab.setOnClickListener(this);
+        adapter.notifyDataSetChanged();
         return rootView;
     }
 
@@ -82,6 +91,17 @@ public class Fragment1 extends Fragment {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab:
+                Intent intent = new Intent(getContext(),InsertActivity.class);
+                startActivityForResult(intent,1001);//액티비티 띄우기
+
+                break;
+        }
+        adapter.notifyDataSetChanged();
+    }
 
 
 /**
