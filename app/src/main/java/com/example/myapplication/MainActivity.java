@@ -1,9 +1,9 @@
 package com.example.myapplication;
 
+import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
-import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -30,6 +30,7 @@ public class MainActivity extends FragmentActivity {
         tabs.addTab(tabs.newTab().setText("Contacts"));
         tabs.addTab(tabs.newTab().setText("Photos"));
         tabs.addTab(tabs.newTab().setText("더보기"));
+
 
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
