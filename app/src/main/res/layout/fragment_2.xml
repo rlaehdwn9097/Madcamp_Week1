@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,16 +8,41 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-
-    <GridView
-        android:id="@+id/gridViewImages"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="3"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
-    </GridView>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/ButtonCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ButtonCamera" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:src="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/ButtonGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ButtonGallery" />
+
+        <GridView
+            android:id="@+id/gridViewImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="10dp"
+            android:numColumns="3"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:verticalSpacing="10dp">
+
+        </GridView>
+
+    </LinearLayout>
 
 </FrameLayout>
