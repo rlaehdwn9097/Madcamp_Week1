@@ -276,4 +276,17 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
         }
     };
 
+
+    /*
+    try {
+      final ExifInterface exifInterface = new ExifInterface(imagePath);
+      float[] latLong = new float[2];
+      if (exifInterface.getLatLong(latLong)) {
+        // Do stuff with lat / long...
+      }
+    } catch (IOException e) {
+      logger.info("Couldn't read exif info: " + e.getLocalizedMessage());
+    }
+     */
+
 }
