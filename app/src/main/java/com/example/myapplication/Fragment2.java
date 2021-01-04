@@ -6,9 +6,6 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,18 +24,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -141,23 +134,6 @@ public class Fragment2 extends Fragment {
             }
         });
 
-        //imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat1));
-
-        /*imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat2));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat3));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat4));
-
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat5));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat6));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat7));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat8));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat9));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat10));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat11));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat12));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat13));
-        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat14));*/
-
         buttonGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,14 +142,7 @@ public class Fragment2 extends Fragment {
                 i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
                 i.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                //i.setDataAndType(photoURI,"image/*");
-                // ******** code for crop image
-                /*
-                i.putExtra("crop", "true");
-                i.putExtra("aspectX", 100);
-                i.putExtra("aspectY", 100);
-                i.putExtra("outputX", 256);
-                i.putExtra("outputY", 356);*/
+
 
                 try {
 
@@ -187,7 +156,6 @@ public class Fragment2 extends Fragment {
 
             }
         });
-        //Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         //-------------------사진추가__아래-----------------------------
 
