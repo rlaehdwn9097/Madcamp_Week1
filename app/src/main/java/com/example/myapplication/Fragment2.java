@@ -2,10 +2,12 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +27,18 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.text.BreakIterator;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import static com.bumptech.glide.request.RequestOptions.fitCenterTransform;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,9 +47,16 @@ import java.util.ArrayList;
  */
 public class Fragment2 extends Fragment {
 
+    private static final int REQ_IMAGE_CAPTURE = 1;
     //--------------------사진 추가-----------------------------
     Button buttonCamera, buttonGallery;
     ImageView imageView2;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
+
+    //다운로드할 파일을 가르키는 참조 만들기
+    StorageReference pathReference = storageReference.child("uploads/020210104042033.png");
 
     //--------------------------------------------------------
 
@@ -45,6 +65,8 @@ public class Fragment2 extends Fragment {
     private Context context;
     Button btn;
 
+
+    /*
     private int[] imageIDs = new int[] {
             R.drawable.cat1,
             /*
@@ -68,10 +90,14 @@ public class Fragment2 extends Fragment {
             R.drawable.cat19,
             R.drawable.cat20,
 
-             */
-    };
 
-    private ArrayList<Integer> imageID = new ArrayList<Integer>();
+
+    };
+*/
+
+
+    private ArrayList<Uri> imageID = new ArrayList<Uri>();
+
 
 
     public Fragment2() {
@@ -89,12 +115,57 @@ public class Fragment2 extends Fragment {
         //-------------------사진추가__위-------------------------------
         buttonGallery = (Button) rootView.findViewById(R.id.ButtonGallery);
         imageView2 = (ImageView) rootView.findViewById(R.id.imageView2);
+        buttonCamera = (Button) rootView.findViewById(R.id.ButtonCamera);
+        int permission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        if(permission == PackageManager.PERMISSION_DENIED){
+            // 권한 없어서 요청
+        } else{ // 권한 있음
+            startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE),REQ_IMAGE_CAPTURE);
+        }
 
+
+        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Toast.makeText(context.getApplicationContext(), "다운로드 성공 : "+ uri, Toast.LENGTH_SHORT).show();
+                //Glide.with(context).asDrawable().apply(fitCenterTransform()).load(uri).into(imageID);
+
+                //imageView2.setImageURI(uri);
+                imageID.add(uri);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context.getApplicationContext(), "다운로드 실패", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat1));
+
+        /*imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat2));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat3));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat4));
+
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat5));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat6));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat7));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat8));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat9));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat10));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat11));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat12));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat13));
+        imageID.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.cat14));*/
 
         buttonGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent i = new Intent(Intent.ACTION_PICK);
+                i.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+                i.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
                 //i.setDataAndType(photoURI,"image/*");
                 // ******** code for crop image
                 /*
@@ -120,8 +191,11 @@ public class Fragment2 extends Fragment {
 
         //-------------------사진추가__아래-----------------------------
 
+
+
         gridView = (GridView) rootView.findViewById(R.id.gridViewImages);
-        adapter = new ImageAdapter(context, imageIDs);
+        //adapter = new ImageAdapter(context, imageIDs);
+        adapter = new ImageAdapter(context, imageID);
         gridView.setAdapter(adapter);
 
 
@@ -131,6 +205,9 @@ public class Fragment2 extends Fragment {
         // Inflate the layout for this fragment
         return rootView;
     }
+
+
+
     //----------------사진추가_위----------------------------------
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     { //권한을 허용 했을 경우
@@ -173,15 +250,43 @@ public class Fragment2 extends Fragment {
         //super method removed
         if (data != null) {
             Uri selectedImage = data.getData();
+            ClipData clipData = data.getClipData();
+            /*
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
             Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
 
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            imageView2.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            String picturePath = cursor.getString(columnIndex);*/
+            imageView2.setImageURI(selectedImage);
+            //imageView2.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
-            cursor.close();
+
+            //______다중 선택하기
+                        //----https://namhandong.tistory.com/43------참고사이트//
+            SimpleDateFormat sdf= new SimpleDateFormat("yyyyMMddhhmmss");
+            String filename;
+            for(int i = 0 ; i < clipData.getItemCount(); i++){
+                //______firebase에 갤러리 이미지 업로드하기
+                FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+                //파일 명이 중복되지 않도록 날짜를 이용
+
+                filename= sdf.format(new Date())+ ".png";//현재 시간으로 파일명 지정 20191023142634
+                //원래 확장자는 파일의 실제 확장자를 얻어와서 사용해야함. 그러려면 이미지의 절대 주소를 구해야함.
+
+                StorageReference imgRef= firebaseStorage.getReference("uploads/"+i+filename);
+                //uploads라는 폴더가 없으면 자동 생성
+                //StorageReference imgRef = firebaseStorage.getReference("image");
+                imgRef.putFile(clipData.getItemAt(i).getUri());//firebase에 upload하기
+
+                //firebase에 갤러리 이미지 업로드하기______
+
+                //imageID.add(clipData.getItemAt(i).getUri());
+            }
+
+            //다중 선택하기_____
+            //imageID.add(selectedImage);
+            //cursor.close();
         } else {
             Toast.makeText(getActivity(), "Try Again!!", Toast.LENGTH_SHORT).show();
         }

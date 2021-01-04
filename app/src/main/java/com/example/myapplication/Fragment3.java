@@ -5,7 +5,10 @@ import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+
 import android.os.Handler;
+import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +40,7 @@ import static com.example.myapplication.customMarkerFunction.removeMarkerFromFir
 import static com.example.myapplication.customMarkerFunction.writeNewMarkerToFirebase;
 
 public class Fragment3 extends Fragment implements OnMapReadyCallback {
+
     private GoogleMap mMap;
     private EditText editText;
     private Button button;
@@ -48,6 +52,8 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
     private int doubleClickFlag = 0;
     private final long  CLICK_DELAY = 1000;
     private ArrayList<myMarker> arrayList;
+    GoogleMap mMap;
+
 
     public Fragment3() {
         // Required empty public constructor
@@ -78,6 +84,7 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
         //oneMarker();
         //manyMarker();
         //drawPloyLines();
+
         findMarkerFromFireBase();
         //putMarker();
     }
@@ -112,6 +119,9 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
             }
         });
 
+
+
+        //drawMultiPloyLines();
 
     }
 
@@ -149,10 +159,24 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
         //카메라를 여의도 위치로 옮긴다.
         // mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
         //처음 줌 레벨 설정 (해당좌표=>서울, 줌레벨(16)을 매개변수로 넣으면 된다.) (위에 코드대신 사용가능)(중첩되면 이걸 우선시하는듯)
+
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(arrayList.get(1).getLat(), arrayList.get(1).getLng()), 16));
 
     }
 
+
+
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul, 16));
+/*
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.d("1", "onInfoWindowClick: ");
+                Toast.makeText(getContext(), "눌렀습니다!!", Toast.LENGTH_LONG);
+                return false;
+            }
+        });
+*/
 
 
     public void findLocationFromString(){
@@ -470,6 +494,47 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
 
     }
 
+<<<<<<< HEAD
+=======
+    //마커정보창 클릭리스너는 다작동하나, 마커클릭리스너는 snippet정보가 있으면 중복되어 이벤트처리가 안되는거같다.
+    // oneMarker(); 는 동작하지않으나 manyMarker(); 는 snippet정보가 없어 동작이가능하다.
+
+    //정보창 클릭 리스너
+    GoogleMap.OnInfoWindowClickListener infoWindowClickListener = new GoogleMap.OnInfoWindowClickListener() {
+        @Override
+        public void onInfoWindowClick(Marker marker) {
+            String markerId = marker.getId();
+            Log.d("2", "onInfoWindowClick: ");
+            Toast.makeText(getContext(), "정보창 클릭 Marker ID : "+markerId, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    //마커 클릭 리스너
+    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            String markerId = marker.getId();
+            Log.d("3", "onInfoWindowClick: ");
+            //선택한 타겟위치
+            LatLng location = marker.getPosition();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,10));
+            Toast.makeText(getContext(), "마커 클릭 Marker ID : "+markerId+"("+location.latitude+" "+location.longitude+")", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    };
+
+
+    /*
+    try {
+      final ExifInterface exifInterface = new ExifInterface(imagePath);
+      float[] latLong = new float[2];
+      if (exifInterface.getLatLong(latLong)) {
+        // Do stuff with lat / long...
+      }
+    } catch (IOException e) {
+      logger.info("Couldn't read exif info: " + e.getLocalizedMessage());
+    }
+>>>>>>> main
      */
 
 }
