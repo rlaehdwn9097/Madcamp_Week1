@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 public class Fragment3 extends Fragment implements OnMapReadyCallback {
     GoogleMap mMap;
+
     public Fragment3() {
         // Required empty public constructor
     }
@@ -43,10 +45,10 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         //지도타입 - 일반
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        //oneMarker();
+        oneMarker();
         //manyMarker();
         //drawPloyLines();
-        drawMultiPloyLines();
+        //drawMultiPloyLines();
     }
 
     //마커하나찍는 기본 예제
@@ -78,15 +80,16 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
         // mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
         //처음 줌 레벨 설정 (해당좌표=>서울, 줌레벨(16)을 매개변수로 넣으면 된다.) (위에 코드대신 사용가능)(중첩되면 이걸 우선시하는듯)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul, 16));
-
+/*
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                Log.d("1", "onInfoWindowClick: ");
                 Toast.makeText(getContext(), "눌렀습니다!!", Toast.LENGTH_LONG);
                 return false;
             }
         });
-
+*/
 
 
     }
@@ -259,6 +262,7 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
         @Override
         public void onInfoWindowClick(Marker marker) {
             String markerId = marker.getId();
+            Log.d("2", "onInfoWindowClick: ");
             Toast.makeText(getContext(), "정보창 클릭 Marker ID : "+markerId, Toast.LENGTH_SHORT).show();
         }
     };
@@ -268,6 +272,7 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
         @Override
         public boolean onMarkerClick(Marker marker) {
             String markerId = marker.getId();
+            Log.d("3", "onInfoWindowClick: ");
             //선택한 타겟위치
             LatLng location = marker.getPosition();
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,10));
