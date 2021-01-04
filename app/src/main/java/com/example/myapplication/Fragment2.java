@@ -47,6 +47,7 @@ public class Fragment2 extends Fragment {
 
     private int[] imageIDs = new int[] {
             R.drawable.cat1,
+            /*
             R.drawable.cat2,
             R.drawable.cat3,
             R.drawable.cat4,
@@ -66,6 +67,8 @@ public class Fragment2 extends Fragment {
             R.drawable.cat18,
             R.drawable.cat19,
             R.drawable.cat20,
+
+             */
     };
 
     private ArrayList<Integer> imageID = new ArrayList<Integer>();

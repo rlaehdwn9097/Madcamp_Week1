@@ -40,8 +40,6 @@ public class InsertActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.insert_email);
         phone = (EditText) findViewById(R.id.insert_phone);
 
-
-
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,10 +52,7 @@ public class InsertActivity extends AppCompatActivity {
 
     private void writeNewUser(String name,String phone, String email, String image) {
         //Contact contact = new Contact(name, phone, email, image);
-
-
         contactid = (int) ((Math.random() * (max - min)) + min);
-
         mDatabase.child("User").child("User_" + String.valueOf(contactid)).child("name").setValue(name);
         mDatabase.child("User").child("User_" + String.valueOf(contactid)).child("email").setValue(email);
         mDatabase.child("User").child("User_" + String.valueOf(contactid)).child("phone").setValue(phone);

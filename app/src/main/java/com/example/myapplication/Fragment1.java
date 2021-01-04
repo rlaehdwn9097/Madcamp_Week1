@@ -90,7 +90,6 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
             case R.id.fab:
                 Intent intent = new Intent(getContext(),InsertActivity.class);
                 startActivityForResult(intent,1001);//액티비티 띄우기
-
                 break;
         }
         adapter.notifyDataSetChanged();
