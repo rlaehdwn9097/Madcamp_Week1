@@ -5,10 +5,7 @@ import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-
 import android.os.Handler;
-import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +49,7 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
     private int doubleClickFlag = 0;
     private final long  CLICK_DELAY = 1000;
     private ArrayList<myMarker> arrayList;
-    GoogleMap mMap;
+
 
 
     public Fragment3() {
