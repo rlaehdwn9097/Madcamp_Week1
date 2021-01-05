@@ -126,16 +126,12 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
                     ObjectAnimator.ofFloat(itemFab, "translationY", 0f).start();
                     isOpen = false;
                 }
-
                 break;
             case R.id.insertfab:
                 Intent intent = new Intent(getContext(), InsertContactActivity.class);
                 startActivityForResult(intent,1001);//액티비티 띄우기
                 break;
-            case R.id.deletefab:
-                //Toast.makeText(getContext(), "categoryFab", Toast.LENGTH_SHORT).show();
 
-                break;
         }
 
     }

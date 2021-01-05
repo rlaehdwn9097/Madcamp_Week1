@@ -47,8 +47,8 @@ public class InsertContactActivity extends AppCompatActivity {
                 long time = System.currentTimeMillis();
 
                 writeNewUser(name.getText().toString(),
-                        email.getText().toString(),
                         phone.getText().toString(),
+                        email.getText().toString(),
                         "https://firebasestorage.googleapis.com/v0/b/andproject-dfe1b.appspot.com/o/cat0.jpg?alt=media&token=4b3bdcc5-892f-40b3-a4f4-c16f81e5cbd4",
                         "9"+String.valueOf(time));
                 finish();
