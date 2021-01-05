@@ -39,17 +39,8 @@ public class InsertActivity extends AppCompatActivity {
         name = (EditText) findViewById(R.id.insert_name);
         email = (EditText) findViewById(R.id.insert_email);
         phone = (EditText) findViewById(R.id.insert_phone);
-
-
-
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                writeNewUser(name.getText().toString(), email.getText().toString(), phone.getText().toString(),"https://firebasestorage.googleapis.com/v0/b/andproject-dfe1b.appspot.com/o/cat0.jpg?alt=media&token=4b3bdcc5-892f-40b3-a4f4-c16f81e5cbd4");
-                finish();
-            }
-        });
-
+        writeNewUser(name.getText().toString(), email.getText().toString(), phone.getText().toString(),"https://firebasestorage.googleapis.com/v0/b/andproject-dfe1b.appspot.com/o/cat0.jpg?alt=media&token=4b3bdcc5-892f-40b3-a4f4-c16f81e5cbd4");
+        finish();
     }
 
     private void writeNewUser(String name,String phone, String email, String image) {

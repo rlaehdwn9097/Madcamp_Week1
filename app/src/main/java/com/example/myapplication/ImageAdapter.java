@@ -1,17 +1,12 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -22,6 +17,7 @@ public class ImageAdapter extends BaseAdapter {
 
     //int[] imageArray = null;
     ArrayList<Uri> imageArray;
+    //ArrayList<Imagecontent> imagecontentArray;
 
     @Override
     public int getCount() {
@@ -29,14 +25,19 @@ public class ImageAdapter extends BaseAdapter {
         return imageArray.size();
     }
 
-    public ImageAdapter(Context context, /*int[] imageIDs*/ArrayList<Uri> imageIDs) {
+    public ImageAdapter(Context context, ArrayList<Uri> imageIDs) {
         this.context = context;
         this.imageArray = imageIDs;
     }
+    /*
+    public ImageAdapter(Context context, ArrayList<Imagecontent> imagecontentIDS) {
+        this.context = context;
+        this.imagecontentArray = imagecontentIDS;
+    }*/
 
     @Override
     public Object getItem(int position) {
-        //return imageArray[position];
+        //\\return imageArray[position];
         return imageArray.get(position);
     }
 
@@ -70,7 +71,9 @@ public class ImageAdapter extends BaseAdapter {
             imageView = new ImageView(context);
             imageView.setAdjustViewBounds(true);
             //Glide로 대체
-            //imageView.setImageURI(imageArray.get(position));
+            Log.d("imageAdapter","____________imageAdapter________ in___________");
+            imageView.setImageURI(imageArray.get(position));
+
 /*
             Glide.with(context)
                     .load(imageArray.get(position))
@@ -87,6 +90,8 @@ public class ImageAdapter extends BaseAdapter {
             ImageClickListener imageViewClickListener
                     = new ImageClickListener(context, imageArray, position);
             imageView.setOnClickListener(imageViewClickListener);
+
+
 
         }
         return imageView;

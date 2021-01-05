@@ -1,10 +1,10 @@
 package com.example.myapplication;
 
-public class image {
+public class Imagecontent {
 
     public String image;
 
-    public image(String image){
+    public Imagecontent(String image){
         this.image = image;
     }
 
