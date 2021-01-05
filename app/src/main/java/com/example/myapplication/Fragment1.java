@@ -161,7 +161,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
         builder.setNeutralButton("연락처 삭제",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(),"예를 선택했습니다.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"삭제되었습니다.",Toast.LENGTH_LONG).show();
                         //연락처 삭제
 
                         removeContact(arrayList, position);

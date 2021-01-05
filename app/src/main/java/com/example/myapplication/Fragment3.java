@@ -225,7 +225,7 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
         @Override
         public void onInfoWindowClick(Marker marker) {
             String markerId = marker.getId();
-            Toast.makeText(getContext(), "정보창 클릭 Marker ID : "+markerId, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "정보창 클릭 Marker ID : "+markerId, Toast.LENGTH_SHORT).show();
             show(marker);
         }
 
@@ -234,8 +234,8 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
             final EditText edittext = new EditText(getContext());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("AlertDialog Title");
-            builder.setMessage("AlertDialog Content");
+            builder.setTitle("-정보수정-");
+            builder.setMessage("타이틀을 입력하세요.");
             builder.setView(edittext);
             builder.setPositiveButton("추가",
                     new DialogInterface.OnClickListener() {
@@ -243,7 +243,7 @@ public class Fragment3 extends Fragment implements OnMapReadyCallback {
                             marker.setTitle(edittext.getText().toString());
                             writeNewMarkerToFirebase(marker);
                             findMarkerFromFireBase();
-                            Toast.makeText(getContext(),"입력되었습니다." ,Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"추가되었습니다." ,Toast.LENGTH_LONG).show();
                         }
                     });
             builder.setNegativeButton("취소",

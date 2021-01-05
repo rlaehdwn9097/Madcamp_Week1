@@ -230,6 +230,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener, View.On
             public void onClick(DialogInterface dialog, int which) {
                 //예 눌렀을때의 이벤트 처리
                 dbHelper.delete(String.valueOf(position));
+                Toast.makeText(getContext(),"삭제되었습니다.",Toast.LENGTH_LONG).show();
                 initFragment2();
             }
         });
