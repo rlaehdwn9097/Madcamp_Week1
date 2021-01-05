@@ -93,7 +93,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener, View.On
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 DBHelper dbHelper;
-                dbHelper = new DBHelper(context,"test2.db",null,1);
+                dbHelper = new DBHelper(context,"test3.db",null,1);
                 deleteDialog(dbHelper, position);
                 return true;
             }
