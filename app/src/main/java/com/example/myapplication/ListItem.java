@@ -5,14 +5,24 @@ public class ListItem {
     private String name;
     private String phone;
     private String Email;
+    private String image;
 
     public ListItem(){
     }
 
-    public ListItem(String name, String phone, String Email){
+    public ListItem(String name, String phone, String Email, String image){
         this.name = name;
         this.phone = phone;
         this.Email = Email;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getName() {

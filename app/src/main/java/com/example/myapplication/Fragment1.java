@@ -1,67 +1,36 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Fragment1#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Fragment1 extends Fragment {
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
-    public ListItemAdapter adapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.melnykov.fab.FloatingActionButton;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.ArrayList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class Fragment1 extends Fragment implements View.OnClickListener {
+
+    public ContactsAdapter adapter;
+    public ListView list;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    private ArrayList<Contact> arrayList;
+    private FloatingActionButton fab;
+
 
     public Fragment1() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment1.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Fragment1 newInstance(String param1, String param2) {
-        Fragment1 fragment = new Fragment1();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -73,62 +42,58 @@ public class Fragment1 extends Fragment {
         // Generate sample data
 
         // Locate the ListView in fragmenttab1.xml
-        ListView list = (ListView) rootView.findViewById(R.id.f1_listview);
+        list = (ListView) rootView.findViewById(R.id.f1_listview);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.attachToListView(list);
+        fab.setOnClickListener(this);
 
-        // Binds the Adapter to the ListView
-        adapter = new ListItemAdapter();
-        list.setAdapter(adapter);
-        AddItemFromContacts();
-
-        adapter.notifyDataSetChanged();
+        AddItemFromFireBase();
 
         return rootView;
     }
 
-    public void AddItemFromContacts(){
+    public void AddItemFromFireBase(){
 
-        try{
-            InputStream is = getContext().getAssets().open("contacts.json");
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader reader = new BufferedReader(isr);
+        arrayList = new ArrayList<>(); // User 객체를 담을 어레이 리스트 (어댑터쪽으로)
 
-            StringBuffer buffer = new StringBuffer();
-            String line = reader.readLine();
-            while(line != null){
-                buffer.append(line);
-                line = reader.readLine();
+        database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
+
+        databaseReference = database.getReference("User"); // DB 테이블 연결
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
+                arrayList.clear(); // 기존 배열리스트가 존재하지않게 초기화
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
+                    Contact contact = snapshot.getValue(Contact.class); // 만들어뒀던 User 객체에 데이터를 담는다.
+                    arrayList.add(contact); // 담은 데이터들을 배열리스트에 넣고 리사이클러뷰로 보낼 준비
+                    //Log.d("확인", contact.getName());
+                }
+                adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
             }
 
-            String jsonData = buffer.toString();
-
-
-            JSONObject jsonObject = new JSONObject(jsonData);
-            JSONArray contactsArray = jsonObject.getJSONArray("Contacts");
-            for(int i=0; i<contactsArray.length(); i++)
-            {
-                JSONObject contactsObject = contactsArray.getJSONObject(i);
-                adapter.addItem(contactsObject.getString("name"),
-                        contactsObject.getString("number"),contactsObject.getString("email"));
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 디비를 가져오던중 에러 발생 시
+                //Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
             }
+        });
 
+        adapter = new ContactsAdapter(getContext(), arrayList);
+        list.setAdapter(adapter);
 
-            /*
-            JSONArray jsonArray = new JSONArray(jsonData);
-
-            for(int i=0; i < jsonArray.length(); i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String name = jsonObject.getString("test_name");
-                String phone = jsonObject.getString("test_phone");
-                String email = jsonObject.getString("test_email");
-                Log.d("Name", name);
-                Log.d("phone", phone);
-                Log.d("email", email);
-                adapter.addItem(name, phone, email);
-            }
-            */
-        }
-        catch(IOException | JSONException e){
-            e.printStackTrace();
-        }
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab:
+                Intent intent = new Intent(getContext(),InsertActivity.class);
+                startActivityForResult(intent,1001);//액티비티 띄우기
+
+                break;
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 }

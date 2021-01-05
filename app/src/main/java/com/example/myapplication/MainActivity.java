@@ -1,9 +1,10 @@
 package com.example.myapplication;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
-import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -14,7 +15,14 @@ public class MainActivity extends FragmentActivity {
     Fragment1 fragment1;
     Fragment2 fragment2;
     Fragment3 fragment3;
+    //---------------사진추가__위------------------------------------------------------
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        //call super
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //--------------사진추가__아래--------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
