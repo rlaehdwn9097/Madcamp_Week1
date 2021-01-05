@@ -50,7 +50,7 @@ public class InsertContactActivity extends AppCompatActivity {
                         email.getText().toString(),
                         phone.getText().toString(),
                         "https://firebasestorage.googleapis.com/v0/b/andproject-dfe1b.appspot.com/o/cat0.jpg?alt=media&token=4b3bdcc5-892f-40b3-a4f4-c16f81e5cbd4",
-                        String.valueOf(time));
+                        "9"+String.valueOf(time));
                 finish();
             }
         });
@@ -65,7 +65,7 @@ public class InsertContactActivity extends AppCompatActivity {
         mDatabase.child("User").child("User_" + String.valueOf(id)).child("email").setValue(email);
         mDatabase.child("User").child("User_" + String.valueOf(id)).child("phone").setValue(phone);
         mDatabase.child("User").child("User_" + String.valueOf(id)).child("image").setValue(image);
-        mDatabase.child("User").child("User_" + String.valueOf(id)).child("id").setValue(String.valueOf(id));
+        mDatabase.child("User").child("User_" + String.valueOf(id)).child("id").setValue(id);
 
 
         Toast myToast = Toast.makeText(this.getApplicationContext(), "입력되었습니다.", Toast.LENGTH_SHORT);

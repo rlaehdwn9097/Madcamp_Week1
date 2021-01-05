@@ -58,7 +58,6 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
         fab = (FloatingActionButton) rootView.findViewById(R.id.mainFab);
         itemFab = (FloatingActionButton) rootView.findViewById(R.id.insertfab);
         categoryFab = (FloatingActionButton) rootView.findViewById(R.id.deletefab);
-        //fab.attachToListView(list);
         fab.setOnClickListener(this);
         itemFab.setOnClickListener(this);
         categoryFab.setOnClickListener(this);
@@ -118,13 +117,13 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
             case R.id.mainFab:
 
                 if(!isOpen){
-                    ObjectAnimator.ofFloat(itemFab, "translationY", -400f).start();
-                    ObjectAnimator.ofFloat(categoryFab, "translationY", -200f).start();
+                    //ObjectAnimator.ofFloat(itemFab, "translationY", -400f).start();
+                    ObjectAnimator.ofFloat(itemFab, "translationY", -200f).start();
                     isOpen = true;
                 }
                 else{
+                    //ObjectAnimator.ofFloat(itemFab, "translationY", 0f).start();
                     ObjectAnimator.ofFloat(itemFab, "translationY", 0f).start();
-                    ObjectAnimator.ofFloat(categoryFab, "translationY", 0f).start();
                     isOpen = false;
                 }
 
@@ -153,16 +152,16 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
                         Intent tt = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + arrayList.get(position).getPhone().replaceAll("-", "")));
                         startActivity(tt);
                         //전화거는 거
-
-
                     }
                 });
+
         builder.setNegativeButton("돌아가기",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getContext(),"아니오를 선택했습니다.",Toast.LENGTH_LONG).show();
                     }
                 });
+
         builder.setNeutralButton("연락처 삭제",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -170,7 +169,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
                         //연락처 삭제
 
                         removeContact(arrayList, position);
-
+                        AddItemFromFireBase();
 
                     }
                 });
@@ -184,5 +183,13 @@ public class Fragment1 extends Fragment implements View.OnClickListener {
         mDatabase.removeValue();
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == 1001) {
+            //Refresh the fragment here
+            ObjectAnimator.ofFloat(itemFab, "translationY", 0f).start();
+            AddItemFromFireBase();
+        }
+    }
 
 }

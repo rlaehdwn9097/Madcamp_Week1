@@ -52,7 +52,6 @@
             android:layout_marginBottom="16dp"
             app:borderWidth="0dp"
             android:layout_gravity="bottom|right"
-
             />
 
 </FrameLayout>
