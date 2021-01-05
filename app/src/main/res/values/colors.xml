@@ -8,12 +8,17 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <!--floating action button-->
-    <color name="fabPrimary">#45A1F5</color>
-    <color name="fabPressed">#6EB5F7</color>
-    <color name="fabRipple">#AED6FC</color>
+    <color name="fabPrimary">#B17DFD</color>
+    <color name="fabPressed">#B17DFD</color>
+    <color name="fabRipple">#B17DFD</color>
+
     <!--floating action button2-->
-    <color name="app_primary">#45A1F5</color>
-    <color name="app_primary_pressed">#6EB5F7</color>
+    <color name="app_primary">#4603A6</color>
+    <color name="app_primary_pressed">#822DFB</color>
     <color name="app_ripple">#AED6FC</color>
+
+    <color name="fabPrimary2">#45A1F5</color>
+    <color name="fabPressed2">#6EB5F7</color>
+    <color name="fabRipple2">#AED6FC</color>
 
 </resources>

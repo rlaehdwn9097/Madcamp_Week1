@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity {
         tabs = findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText("Contacts"));
         tabs.addTab(tabs.newTab().setText("Photos"));
-        tabs.addTab(tabs.newTab().setText("더보기"));
+        tabs.addTab(tabs.newTab().setText("KaistAIR"));
 
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

@@ -216,7 +216,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener, View.On
             Log.d("gallery==>>>>>>>>",selectedImage.toString());
 
         } else {
-            Toast.makeText(getActivity(), "Try Again!!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Try Again!!", Toast.LENGTH_SHORT).show();
         }
         initFragment2();
         super.onActivityResult(requestCode, resultCode, data);
