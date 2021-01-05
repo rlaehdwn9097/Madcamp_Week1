@@ -3,8 +3,10 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -28,17 +31,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Fragment2#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Fragment2 extends Fragment {
+public class Fragment2 extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     int i = 1;
     private static final int REQ_IMAGE_CAPTURE = 1;
     private Boolean isPermission = true;
@@ -82,13 +81,40 @@ public class Fragment2 extends Fragment {
         itemFab = (FloatingActionButton) rootView.findViewById(R.id.insertfab);
         deleteFab = (FloatingActionButton) rootView.findViewById(R.id.deletefab);
         gridView = (GridView) rootView.findViewById(R.id.gridViewImages);
-        fab.setOnClickListener(this::onClick);
-        itemFab.setOnClickListener(this::onClick);
-        deleteFab.setOnClickListener(this::onClick);
+        fab.setOnClickListener(this);
+        itemFab.setOnClickListener(this);
+        deleteFab.setOnClickListener(this);
 
         //*******************카메라__아래***********************************
 
         initFragment2();
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                DBHelper dbHelper;
+                dbHelper = new DBHelper(context,"test2.db",null,1);
+                deleteDialog(dbHelper, position);
+                return true;
+            }
+        });
+
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                Intent intent = new Intent(context, PaperActivity.class);
+
+                intent.putExtra("image ID", imageID);
+                intent.putExtra("position", position);
+                intent.putExtra("length",imageID.size());
+                Log.d("viewpager","viewpager in");
+                context.startActivity(intent);
+
+            }
+        });
 
         return rootView;
     }
@@ -132,12 +158,6 @@ public class Fragment2 extends Fragment {
         }
 
     }
-
-
-    //----------------사진추가_아래--------------------------------
-
-
-    //firebase database 추가+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     public void onClick(View v) {
         switch (v.getId()){
@@ -202,4 +222,29 @@ public class Fragment2 extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    private void deleteDialog(DBHelper dbHelper, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("삭제 확인"); builder.setMessage("삭제하시겠습니까?");
+        builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //예 눌렀을때의 이벤트 처리
+                dbHelper.delete(String.valueOf(position));
+                initFragment2();
+            }
+        });
+        builder.setPositiveButton("아니오", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //아니오 눌렀을때의 이벤트 처리
+            }
+        });
+        builder.show();
+
+    }
+
+
+    @Override
+    public boolean onLongClick(View v) {
+        return true;
+    }
 }
