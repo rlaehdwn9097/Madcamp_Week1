@@ -8,41 +8,50 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <LinearLayout
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/insertfab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:src="@drawable/customaddtask"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        app:borderWidth="0dp"
+        android:layout_gravity="bottom|right"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/deletefab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:src="@drawable/customdelete"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        app:borderWidth="0dp"
+        android:layout_gravity="bottom|right"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mainFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/fabPrimary"
+        android:src="@drawable/customdoneoutline"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        app:borderWidth="0dp"
+        android:layout_gravity="bottom|right"
+        />
+    <GridView
+        android:id="@+id/gridViewImages"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:horizontalSpacing="10dp"
+        android:numColumns="3"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:verticalSpacing="10dp">
 
-        <Button
-            android:id="@+id/ButtonCamera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ButtonCamera" />
+    </GridView>
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            tools:src="@tools:sample/avatars" />
-
-        <Button
-            android:id="@+id/ButtonGallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ButtonGallery" />
-
-        <GridView
-            android:id="@+id/gridViewImages"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:horizontalSpacing="10dp"
-            android:numColumns="3"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:verticalSpacing="10dp">
-
-        </GridView>
-
-    </LinearLayout>
 
 </FrameLayout>

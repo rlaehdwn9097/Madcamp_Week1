@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +36,6 @@ public class ImageClickListener implements View.OnClickListener {
         //Intent intent = new Intent(context, ImageActivity.class);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         Intent intent = new Intent(context, PaperActivity.class);
-
 
         //Intent intent = new Intent(context, PaperActivity.class);
         //intent.putExtra("image ID", imageID);

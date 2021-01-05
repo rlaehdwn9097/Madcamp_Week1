@@ -1,15 +1,12 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
@@ -47,13 +44,11 @@ public class PaperAdapter extends PagerAdapter {
         View v = inflater.inflate(R.layout.slider, container,false);
 
         ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
-        TextView textView = (TextView) v.findViewById(R.id.textView);
         //Log.d("preposition", String.valueOf(preposition));
         //Log.d("position", String.valueOf(position));
         //imageView.setImageResource(images[position]);
         imageView.setImageURI(images.get(position));
         //imageView.setImageBitmap(images.get(position));
-        textView.setText((position+1) + "image");
 
         v.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){

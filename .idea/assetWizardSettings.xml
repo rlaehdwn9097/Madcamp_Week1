@@ -37,7 +37,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\q\Downloads\delete-24px.svg" />
+                                                <entry key="imagePath" value="C:\Users\q\Downloads\add_photo_alternate-24px.svg" />
                                                 <entry key="opacityPercent" value="60" />
                                               </map>
                                             </option>
@@ -71,7 +71,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\q\Downloads\delete-24px.svg" />
+                                      <entry key="imageAsset" value="C:\Users\q\Downloads\add_photo_alternate-24px.svg" />
                                       <entry key="outputName" value="customdelete" />
                                     </map>
                                   </option>

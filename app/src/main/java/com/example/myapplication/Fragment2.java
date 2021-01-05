@@ -1,62 +1,69 @@
 package com.example.myapplication;
 
+
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.core.content.FileProvider;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link Fragment2#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class Fragment2 extends Fragment {
-
+    int i = 1;
     private static final int REQ_IMAGE_CAPTURE = 1;
-    //--------------------사진 추가-----------------------------
-    Button buttonCamera, buttonGallery;
-    ImageView imageView2;
-
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageReference = storage.getReference();
-
-    //다운로드할 파일을 가르키는 참조 만들기
-    StorageReference pathReference = storageReference.child("uploads/");
-
-    //--------------------------------------------------------
+    private Boolean isPermission = true;
     private File tempFile;
-    GridView gridView;
-    ImageAdapter adapter;
-    private Context context;
-    Button btn;
-
     private static final int PICK_FROM_ALBUM = 1;
     private static final int PICK_FROM_CAMERA = 2;
+    private FloatingActionButton fab;
+    private FloatingActionButton itemFab;
+    private FloatingActionButton deleteFab;
+    private boolean isOpen = false;
 
-    //private ArrayList<Uri> imageID = new ArrayList<qi>();
-    public ArrayList<ImageURL> imageID;
+
+    //--------------------사진 추가-----------------------------
+    public ImageView imageView2;
+    public FirebaseStorage storage = FirebaseStorage.getInstance();
+    public StorageReference storageReference = storage.getReference();
+    //다운로드할 파일을 가르키는 참조 만들기
+    public StorageReference pathReference = storageReference.child("uploads/020210104042033.png");
+
+    //--------------------------------------------------------
+    public GridView gridView;
+    public ImageAdapter adapter;
+    public Context context;
+    public ArrayList<Uri> imageID = new ArrayList<Uri>();
+    public DBHelper dbHelper;
 
     public Fragment2() {
         // Required empty public constructor
@@ -64,115 +71,135 @@ public class Fragment2 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        imageID.clear();
         context = getContext();
+        checkSelfPermission();
+        dbHelper = new DBHelper(context,"test.db",null,1);
         View rootView = inflater.inflate(R.layout.fragment_2, container, false);
 
         //-------------------사진추가__위-------------------------------
-        buttonGallery = (Button) rootView.findViewById(R.id.ButtonGallery);
-        imageView2 = (ImageView) rootView.findViewById(R.id.imageView2);
-        buttonCamera = (Button) rootView.findViewById(R.id.ButtonCamera);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.mainFab);
+        itemFab = (FloatingActionButton) rootView.findViewById(R.id.insertfab);
+        deleteFab = (FloatingActionButton) rootView.findViewById(R.id.deletefab);
+        gridView = (GridView) rootView.findViewById(R.id.gridViewImages);
+        fab.setOnClickListener(this::onClick);
+        itemFab.setOnClickListener(this::onClick);
+        deleteFab.setOnClickListener(this::onClick);
 
+        //*******************카메라__아래***********************************
 
-        tedPermission();
-
-
-
-
-        buttonCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "카메라 버튼 누름", Toast.LENGTH_SHORT).show();
-                takePhoto();
-            }
-        });
+        initFragment2();
 
         return rootView;
     }
 
 
-    private void takePhoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        
-        try {
-            tempFile = createImageFile();
-        } catch (IOException e) {
-            Toast.makeText(context, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-            finish();
-            e.printStackTrace();
+    //----------------사진추가_위----------------------------------
+
+    public void initFragment2(){
+        imageID.clear();
+        Cursor cursor = dbHelper.select();
+        cursor.moveToFirst();
+        for(int i = 0 ; i < cursor.getCount(); i++){
+            String str_image = cursor.getString(cursor.getColumnIndex("image"));
+            Log.d("uri_string===>>>>",str_image);
+
+            File file = new File(str_image);
+            imageID.add(Uri.parse(str_image));
+            cursor.moveToNext();
         }
-        if (tempFile != null) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                Uri photoUri = FileProvider.getUriForFile(context,
-                        "com.tistory.black_jin0427.myimagesample.provider", tempFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(intent, PICK_FROM_CAMERA);
-            } else {
-                Uri photoUri = Uri.fromFile(tempFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(intent, PICK_FROM_CAMERA);
-            }
+        adapter = new ImageAdapter(context, imageID);
+        gridView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+
+    public void checkSelfPermission() {
+        String temp = "";
+        //파일 읽기 권한 확인
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " ";
+        }
+        //파일 쓰기 권한 확인
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " ";
+        }
+        if (TextUtils.isEmpty(temp) == false) {
+            // 권한 요청
+            ActivityCompat.requestPermissions(getActivity(), temp.trim().split(" "), 1);
+        } else {
+            //Toast.makeText(this, "권한을 모두 허용", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    //----------------사진추가_아래--------------------------------
+
+
+    //firebase database 추가+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.mainFab:
+                if(!isOpen){
+                    //ObjectAnimator.ofFloat(itemFab, "translationY", -400f).start();
+                    ObjectAnimator.ofFloat(deleteFab, "translationY", -200f).start();
+                    isOpen = true;
+                }
+                else{
+                    //ObjectAnimator.ofFloat(itemFab, "translationY", 0f).start();
+                    ObjectAnimator.ofFloat(deleteFab, "translationY", 0f).start();
+                    isOpen = false;
+                }
+                break;
+            case R.id.deletefab:
+                //Toast.makeText(getContext(), "categoryFab", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(Intent.ACTION_PICK);
+                i.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                //i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                i.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+
+                try {
+
+                    i.putExtra("data", true);
+
+                    startActivityForResult(
+                            Intent.createChooser(i, "Select Picture"), 0);
+                } catch (
+                        ActivityNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+                break;
         }
     }
 
-    private void finish() {
-    }
-
-    private File createImageFile() throws IOException {
-        // 이미지 파일 이름 ( blackJin_{시간}_ )
-        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-        String imageFileName = "blackJin_" + timeStamp + "_";
-        // 이미지가 저장될 파일 주소 ( blackJin )
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/blackJin/");
-        if (!storageDir.exists()) storageDir.mkdirs();
-        // 빈 파일 생성
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        Log.d("createImageFIle() ++->", "createImageFile : " + image.getAbsolutePath());
-        return image;
-    }
-
-    private void setImage() {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap originalBm = BitmapFactory.decodeFile(tempFile.getAbsolutePath(), options);
-        Log.d("setImage ++++>", "setImage : " + tempFile.getAbsolutePath());
-        imageView2.setImageBitmap(originalBm);
-        tempFile = null;
-    }
-    
-    public void tedPermission(){
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getContext(), "권한 허가", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getContext(), "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        TedPermission.with(getContext())
-                .setPermissionListener(permissionlistener)
-                .setRationaleMessage("구글 로그인을 하기 위해서는 주소록 접근 권한이 필요해요")
-                .setDeniedMessage("왜 거부하셨어요...\n하지만 [설정] > [권한] 에서 권한을 허용할 수 있어요.")
-                .setPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA})
-                .check();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("image", "image");
+        //super method removed
+        if (data != null) {
 
-        if (requestCode == PICK_FROM_ALBUM) {
+            Uri selectedImage = data.getData();
 
-            Uri photoUri = data.getData();
+            SimpleDateFormat sdf= new SimpleDateFormat("yyyyMMddhhmmss");
+            String filename;
+            filename= sdf.format(new Date())+ ".png";//현재 시간으로 파일명 지정 20191023142634
+            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            StorageReference imgRef= firebaseStorage.getReference("uploads/"+filename);
+            imgRef.putFile(selectedImage);
 
-            setImage();
 
-        } else if (requestCode == PICK_FROM_CAMERA) {
+            //다중 선택하기_____
+            dbHelper.insert(selectedImage.toString(),String.valueOf(dbHelper.select().getCount()));
+            i++;
+            Log.d("gallery==>>>>>>>>",selectedImage.toString());
 
-            setImage();
-
+        } else {
+            Toast.makeText(getActivity(), "Try Again!!", Toast.LENGTH_SHORT).show();
         }
+        initFragment2();
+        super.onActivityResult(requestCode, resultCode, data);
     }
+
 }

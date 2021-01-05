@@ -1,17 +1,12 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -22,6 +17,7 @@ public class ImageAdapter extends BaseAdapter {
 
     //int[] imageArray = null;
     ArrayList<Uri> imageArray;
+    //ArrayList<Imagecontent> imagecontentArray;
 
     @Override
     public int getCount() {
@@ -29,14 +25,19 @@ public class ImageAdapter extends BaseAdapter {
         return imageArray.size();
     }
 
-    public ImageAdapter(Context context, /*int[] imageIDs*/ArrayList<Uri> imageIDs) {
+    public ImageAdapter(Context context, ArrayList<Uri> imageIDs) {
         this.context = context;
         this.imageArray = imageIDs;
     }
+    /*
+    public ImageAdapter(Context context, ArrayList<Imagecontent> imagecontentIDS) {
+        this.context = context;
+        this.imagecontentArray = imagecontentIDS;
+    }*/
 
     @Override
     public Object getItem(int position) {
-        //return imageArray[position];
+        //\\return imageArray[position];
         return imageArray.get(position);
     }
 
@@ -53,32 +54,14 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         else {
             //---------------------------------------------------------------
-            // GridView 뷰를 구성할 ImageView 뷰의 비트맵을 정의합니다.
-            // 그리고 그것의 크기를 320*240으로 줄입니다.
-            // 크기를 줄이는 이유는 메모리 부족 문제를 막을 수 있기 때문입니다.
-            /*
-            Bitmap bmp
-                    = BitmapFactory.decodeResource(context.getResources(), imageArray[position]);*/
-            //Bitmap bmp = imageArray.get(position);
-            //bmp = Bitmap.createScaledBitmap(bmp, 100, 100, false);
-
-
-            //---------------------------------------------------------------
             // GridView 뷰를 구성할 ImageView 뷰들을 정의합니다.
             // 뷰에 지정할 이미지는 앞에서 정의한 비트맵 객체입니다.
 
             imageView = new ImageView(context);
             imageView.setAdjustViewBounds(true);
             //Glide로 대체
-            //imageView.setImageURI(imageArray.get(position));
-/*
-            Glide.with(context)
-                    .load(imageArray.get(position))
-                    .apply(new RequestOptions().override(150, 150))
-                    .into(imageView);
-
- */
-
+            Log.d("imageAdapter","____________imageAdapter________ in___________");
+            imageView.setImageURI(imageArray.get(position));
 
             //---------------------------------------------------------------
             // 사진 항목들의 클릭을 처리하는 ImageClickListener 객체를 정의합니다.
@@ -87,6 +70,11 @@ public class ImageAdapter extends BaseAdapter {
             ImageClickListener imageViewClickListener
                     = new ImageClickListener(context, imageArray, position);
             imageView.setOnClickListener(imageViewClickListener);
+
+            ImageLongClickListener imageViewLongClickListener
+                    = new ImageLongClickListener(context,position);
+            imageView.setOnLongClickListener(imageViewLongClickListener);
+
 
         }
         return imageView;
