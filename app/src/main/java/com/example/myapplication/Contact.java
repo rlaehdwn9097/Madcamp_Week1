@@ -5,15 +5,17 @@ public class Contact {
     private String phone;
     private String email;
     private String image;
+    private String id;
 
     public Contact(){
     }
 
-    public Contact(String name, String phone, String email, String image){
+    public Contact(String name, String phone, String email, String image, String id){
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.image = image;
+        this.id = id;
     }
 
     public String getImage() {
@@ -47,4 +49,13 @@ public class Contact {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

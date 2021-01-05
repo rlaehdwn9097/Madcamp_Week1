@@ -4,25 +4,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment1">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/f1_listview"
-        />
 
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:src="@drawable/fab_icon"
-        fab:fab_colorNormal="@color/fabPrimary"
-        fab:fab_colorPressed="@color/fabPressed"
-        fab:fab_colorRipple="@color/fabRipple"/>
+
+        <ListView
+            android:id="@+id/f1_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteY="9dp" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/insertfab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:src="@drawable/customaddtask"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            app:borderWidth="0dp"
+            android:layout_gravity="bottom|right"
+             />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/deletefab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:src="@drawable/customdelete"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            app:borderWidth="0dp"
+            android:layout_gravity="bottom|right"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/mainFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/fabPrimary"
+            android:src="@drawable/customdoneoutline"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            app:borderWidth="0dp"
+            android:layout_gravity="bottom|right"
+
+            />
 
 </FrameLayout>
+    <!--
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/fab_icon"
+                fab:fab_colorNormal="@color/app_primary"
+                fab:fab_colorPressed="@color/app_primary_pressed"
+                fab:fab_colorRipple="@color/app_ripple"/>
+
+
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/fab_icon"
+                    fab:fab_colorNormal="@color/fabPrimary"
+                    fab:fab_colorPressed="@color/fabPressed"
+                    fab:fab_colorRipple="@color/fabRipple"/>
+-->

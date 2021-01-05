@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         >
         <EditText
-            android:layout_width="300dp"
+            android:layout_width="270dp"
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:hint="HELLO WORLD!"
@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:text="Search"
             android:id="@+id/button"
+            android:layout_alignBottom="@+id/decoder_editText"
             android:layout_toRightOf="@+id/decoder_editText"
             />
 
